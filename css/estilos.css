@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+* {
+    font-family: "Montserrat";
+    padding: 0;
+    margin: 0;
+    user-select: none;
+}
+
+body{
+    width: 100%;
+    min-height: 100vh;
+    background-color: #333B3E;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+body::-webkit-scrollbar{
+    width: 7px;
+}
+
+body::-webkit-scrollbar-thumb{
+    width: 7px;
+    background-color: #00000099;
+    border-radius: 3px;
+}
+
+h2{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.redes{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    border-radius: 5px;
+    width: 50px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    gap: 5px;
+    margin-left: 10px;
+    margin-bottom: 50px;
+    background-color: #00000099;
+    box-shadow: 0 0 3px #000;
+}
+
+.contenedor-btn-top{
+
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    transform: translateX(200px);
+    transition: .7s ease all;
+
+    background-image: url(../img/flecha-hacia-arriba.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    
+    background-color: #00000099;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.contenedor-btn-top img{
+    width: 80%;
+    z-index: 1;
+}
+
+.contenedor-btn-top-active{
+    transform: translateX(0);
+}
+
+.redes div{
+    width: 90%;
+}
+
+.redes div img{
+    width: 100%;
+}
+
+.autoria{
+    position: fixed;
+    bottom: 0; left: 0; 
+    margin: 10px; 
+    background-color: #00000099; 
+    padding: 3px; 
+    border-radius: 3px; 
+    font-weight: bold;
+    color:#F77737;
+    box-shadow: 0 0 3px #000;
+}
+
+.autoria a{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    text-decoration: none;
+    color:#F77737;
+}
+
+.autoria a button{
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+.autoria a:hover{
+    color:#F6F7F8;
+}
+
+nav{
+    width: 100%;
+    height: 80px;
+    background-color: #00000099;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 0 3px #000;
+    color: #F77737;
+}
+
+nav .titulo{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+nav .links{
+    display: flex;
+    gap: 30px;
+}
+
+nav .links a{
+    text-decoration: none;
+    color: #F77737;
+    transition: .4s ease all;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+nav .links a:hover > img{
+    filter: drop-shadow(0 0 1px #fff9);
+}
+
+nav .links a:hover{
+    color: #F6F7F8;
+}
+
+.contenedor-inicial {
+    background-color: #F6F7F8;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 3px #000;
+}
+
+.contenedor-inicial p, form, form div{
+    width: 80%;
+}
+
+p{
+    font-size: 13px;
+}
+
+.contenedor-inicial form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.contenedor-inicial form input{
+    height: 30px;
+}
+
+.contenedor-inicial form input[type="text"]{
+    text-indent: 20px;
+    width: 60%;
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid #0004;
+    transition: .4s ease all;
+}
+
+.contenedor-inicial form input[type="submit"]{
+    width: 100px;
+    border: 2px solid #000;
+    height: 33px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #001446;
+    color: #fff;
+}
+
+.contenedor-inicial form input[type="submit"]:hover{
+    color:#F77737;
+}
+
+.contenedor-inicial form input[type="text"]:focus{
+    border-color: #1777F2;
+} 
+
+.contenedor-secundario{
+    background-color: #F6F7F8;
+    width: 60%;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 3px #000;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 10px;
+}
