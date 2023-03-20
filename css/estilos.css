@@ -102,6 +102,7 @@ h2{
     font-weight: bold;
     color:#F77737;
     box-shadow: 0 0 3px #000;
+    z-index: 1;
 }
 
 .autoria a{
@@ -237,4 +238,23 @@ p{
     flex-wrap: wrap;
     gap: 40px;
     margin-bottom: 10px;
+}
+
+.colores-favoritos{
+    width: 30%;
+    height: 100vh;
+    background-color: #333B3E;
+    color: #fff;
+    position: absolute;
+    left: 0;
+    position: fixed;
+    z-index: 99;
+    box-shadow: 0 0 10px #000;
+    
+    transform: translateX(-10000px);
+    transition: .5s ease-out all;
+}
+
+.activar-menu{
+    transform: translateX(0);
 }
