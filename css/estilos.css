@@ -255,6 +255,16 @@ p{
     transition: .5s ease-out all;
 }
 
+.colores-favoritos::-webkit-scrollbar{
+    width: 4px;
+    background-color: #fff1;
+}
+
+.colores-favoritos::-webkit-scrollbar-thumb{
+    width: 4px;
+    background-color: #000;
+}
+
 .activar-menu{
     transform: translateX(0);
 }

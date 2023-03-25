@@ -1,11 +1,15 @@
-const colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "EDE3E4", "#011C27", "#03254E", "#8FC0A9"]
+const colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"]
 const favoritos = ["#C2AFF0", "#280C49", "#686868", "#0370B7", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"];
 
-document.addEventListener("click", (e) => {
+document.addEventListener("click", (e) => manejadorDeClicks(e));
+document.addEventListener("dblclick", (e) => manejadorDeDobleClick(e));
+document.addEventListener("scroll", (e) => manejadorDeScroll(e));
+document.addEventListener("DOMContentLoaded", agregarColoresAlDOM);
+document.addEventListener("mouseover", (e) => manejadorDeMouseover(e));
+document.addEventListener("mouseout", (e) => manejadorDeMouseout(e));
 
+function manejadorDeClicks(e){
     e.preventDefault();
-
-    console.log(e)
 
     if(e.target.id === "btn-agregar"){
 
@@ -62,10 +66,9 @@ document.addEventListener("click", (e) => {
         document.querySelector(".overlay").style.display = "none";
         document.querySelector(".colores-favoritos").style.transform = "translate(-2000px)";
     }
-})
+}
 
-document.addEventListener("dblclick", (e) => {
-    
+function manejadorDeDobleClick(e){
     if(e.target.matches(".btn-favorito")){
 
         let color = e.target.nextElementSibling.textContent;
@@ -77,11 +80,9 @@ document.addEventListener("dblclick", (e) => {
 
         alert("Color agregado a favoritos");
     }
-})
+}
 
-
-document.addEventListener("scroll", (e) => {
-    
+function manejadorDeScroll(e){
     let scrollValue = document.documentElement.scrollTop;
 
     let btn = document.querySelector(".contenedor-btn-top");
@@ -91,16 +92,27 @@ document.addEventListener("scroll", (e) => {
     } else {
         btn.classList.remove("contenedor-btn-top-active");
     }
+}
 
-})
-
-document.addEventListener("DOMContentLoaded", () => {
+function agregarColoresAlDOM (){
     colores.forEach(color => {
         agregarColor(color, "cargaInicial");
     });
-    
-})
+}
 
+function manejadorDeMouseover(e){
+    if(e.target.matches(".btn-favorito")){
+        const elementoPadre = e.target.parentElement;
+        elementoPadre.style.transform = "scale(1.1)";
+    }
+}
+
+function manejadorDeMouseout(e){
+    if(e.target.matches(".btn-favorito")){
+        const elementoPadre = e.target.parentElement;
+        elementoPadre.style.transform = "scale(1)";
+    }
+}
 
 function agregarColor(color, carga){
     let contenedor = document.createElement("div");
@@ -205,13 +217,14 @@ const estilosDelMenu = (menu) => {
     const botonCerrar = document.createElement("img");
     botonCerrar.src = "./img/boton.png";
     botonCerrar.style.position = "fixed";
+    botonCerrar.style.top = "0"
     botonCerrar.style.right = "0"
     botonCerrar.style.margin = "10px";
     botonCerrar.classList.add("btn-cerrar");
     botonCerrar.style.cursor = "pointer";
 
     menu.appendChild(botonCerrar)
-
+    menu.style.overflowY = "scroll";
     menu.querySelector("h2").style.marginTop = "30px";
     menu.style.display = "flex";
     menu.style.justifyContent = "flex-start";
@@ -250,10 +263,12 @@ const estilosDelMenu = (menu) => {
 }
 
 const copiarCodigoHexadecimal = (e) => {
-    navigator.clipboard.writeText(e.target.dataset.color);
     const codigo = document.createElement("p");
     const elementoPadreDelBtnCopiar = e.target.parentElement;
-    if(codigo.textContent == ""){codigo.textContent = "Copiado";}
+    if(codigo.textContent == ""){
+        codigo.textContent = "Copiado";
+        navigator.clipboard.writeText(e.target.dataset.color);
+    }
     codigo.style.marginLeft = "10px";
     elementoPadreDelBtnCopiar.style.justifyContent = "space-between";
     elementoPadreDelBtnCopiar.style.alignItems = "center"
