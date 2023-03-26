@@ -1,4 +1,4 @@
-const colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"]
+const colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9", "#F8C304", "#04558A", "#F4A300", "#CD4450", "#340763"]
 const favoritos = ["#C2AFF0", "#280C49", "#686868", "#0370B7", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"];
 
 document.addEventListener("click", (e) => manejadorDeClicks(e));
@@ -26,7 +26,7 @@ function manejadorDeClicks(e){
             return alert("Este color ya esta agregado, escribe otro por favor.");
         }
         
-        colores.push(color);
+        colores.unshift(color);
 
         document.querySelector("#color").value = "";
 
@@ -76,22 +76,38 @@ function manejadorDeDobleClick(e){
         if(favoritos.includes(color)){
             return alert("Este color ya esta agregado");
         }
-        favoritos.push(color);
+        favoritos.unshift(color);
 
-        alert("Color agregado a favoritos");
+        e.target.textContent = `⭐Agregado⭐`;
+
     }
 }
 
 function manejadorDeScroll(e){
     let scrollValue = document.documentElement.scrollTop;
 
+    console.log(scrollValue)
+
     let btn = document.querySelector(".contenedor-btn-top");
 
     if(scrollValue > 300){
         btn.classList.add("contenedor-btn-top-active");
-    } else {
+    }else {
         btn.classList.remove("contenedor-btn-top-active");
     }
+
+    if(scrollValue >= 29){
+        document.querySelectorAll(".cambio-activo-scroll").forEach(elemento => {
+            elemento.style.transition = ".3s ease-out all";
+            elemento.style.backgroundColor = "#111"
+            elemento.style.textShadow = "0px 0px 2px #F77737"
+        })
+    }else {
+        document.querySelectorAll(".cambio-activo-scroll").forEach(elemento => {
+            elemento.style.textShadow = "none"
+            elemento.style.backgroundColor  = "#00000099"
+        })
+    } 
 }
 
 function agregarColoresAlDOM (){
@@ -101,16 +117,40 @@ function agregarColoresAlDOM (){
 }
 
 function manejadorDeMouseover(e){
+
+
     if(e.target.matches(".btn-favorito")){
+        const elemento = e.target;
+        let color = e.target.nextElementSibling.textContent;
+        (favoritos.includes(color)) ? elemento.textContent = `⭐Agregado⭐` : elemento.textContent = `⭐Agregar⭐`;
+        elemento.style.transition = ".5s ease all";
+        elemento.style.boxShadow = "3px 3px 10px #0009 inset";
+        elemento.style.zIndex = "100"
         const elementoPadre = e.target.parentElement;
         elementoPadre.style.transform = "scale(1.1)";
+    }
+
+    if(e.target.matches(".color")){
+
+        e.target.parentElement.style.boxShadow = "0 0 5px #000";
+
     }
 }
 
 function manejadorDeMouseout(e){
     if(e.target.matches(".btn-favorito")){
+        const elemento = e.target;
+        elemento.style.transition = ".5s ease all";
+        elemento.style.boxShadow = "3px 3px 10px #0004 inset";
+        elemento.textContent = ``;
         const elementoPadre = e.target.parentElement;
         elementoPadre.style.transform = "scale(1)";
+    }
+
+    if(e.target.matches(".color")){
+
+        e.target.parentElement.style.boxShadow = "none";
+
     }
 }
 
@@ -231,8 +271,12 @@ const estilosDelMenu = (menu) => {
     menu.style.alignItems = "center";
     menu.style.flexDirection = "column"
     menu.style.gap = "30px";
+    menu.style.zIndex = 1001
 
-    favoritos.forEach(valorRGB => {
+    favoritos.forEach((valorRGB, i) => {
+
+        let contadorElementos = i;
+
         const color = document.createElement("div");
         const btnCopiar = document.createElement("button");
 
@@ -246,6 +290,11 @@ const estilosDelMenu = (menu) => {
         btnCopiar.style.borderColor = "#000"
         btnCopiar.style.cursor = "pointer";
 
+        if(favoritos.length-1 === contadorElementos){
+            color.style.marginBottom = "30px";  
+        }
+
+        color.classList.add("color");
         color.style.display = "flex";
         color.style.justifyContent = "flex-end";
         color.style.width = "80%"
@@ -259,23 +308,26 @@ const estilosDelMenu = (menu) => {
         btnCopiar.setAttribute("data-color", valorRGB);
 
         menu.appendChild(color);
+
     })
 }
 
 const copiarCodigoHexadecimal = (e) => {
     const codigo = document.createElement("p");
     const elementoPadreDelBtnCopiar = e.target.parentElement;
+    const boton = e.target;
     if(codigo.textContent == ""){
+        codigo.style.marginLeft = "5px";
         codigo.textContent = "Copiado";
         navigator.clipboard.writeText(e.target.dataset.color);
+        boton.setAttribute("disabled", "true")
     }
-    codigo.style.marginLeft = "10px";
     elementoPadreDelBtnCopiar.style.justifyContent = "space-between";
     elementoPadreDelBtnCopiar.style.alignItems = "center"
     elementoPadreDelBtnCopiar.insertAdjacentElement("afterbegin", codigo)
 
 
-    setTimeout(() => {codigo.textContent = ""}, 3000)
+    setTimeout(() => {codigo.textContent = ""; boton.removeAttribute("disabled")}, 3000)
 }
 
 
