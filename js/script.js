@@ -1,5 +1,5 @@
-const colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9", "#F8C304", "#04558A", "#F4A300", "#CD4450", "#340763"]
-const favoritos = ["#C2AFF0", "#280C49", "#686868", "#0370B7", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"];
+let colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9", "#F8C304", "#04558A", "#F4A300", "#CD4450", "#340763"]
+let favoritos = ["#C2AFF0", "#280C49", "#686868", "#0370B7", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"];
 
 document.addEventListener("click", (e) => manejadorDeClicks(e));
 document.addEventListener("dblclick", (e) => manejadorDeDobleClick(e));
@@ -28,6 +28,8 @@ function manejadorDeClicks(e){
         
         colores.unshift(color);
 
+        localStorage.setItem("colores", JSON.stringify(colores))
+
         document.querySelector("#color").value = "";
 
         agregarColor(color, "cargaDeAgregacion");
@@ -40,19 +42,36 @@ function manejadorDeClicks(e){
         });
     }
 
-    if(e.target.matches("#favoritos")){
-        console.log(favoritos)
-    }
 
     if(e.target.matches("#favoritos")){
         if(favoritos.length == 0){
             return alert("No tienes colores favoritos")
         }
-        activeOverlay()
+        activeOverlay();
+        mostrarMenu();
+    }
+
+    if(e.target.matches("#tecnologias")){
+        activeOverlay();
+        mostrarVentana(agregarElementosTecnologias);
     }
 
     if(e.target.dataset.color){
         copiarCodigoHexadecimal(e)
+    }
+
+    if(e.target.matches(".btn-cerrar-tecnologias")){
+
+        const img = document.querySelector(".overlay .btn-cerrar-tecnologias");
+        const div = document.querySelector(".overlay div");
+        const overlay = document.querySelector(".overlay");
+
+        overlay.removeChild(div);
+        overlay.removeChild(img);
+
+        document.body.style.overflowY = "scroll";
+
+        overlay.style.display = "none";
     }
 
     if(e.target.matches(".btn-cerrar")){
@@ -65,10 +84,9 @@ function manejadorDeClicks(e){
 
         document.querySelector(".overlay").style.display = "none";
         document.querySelector(".colores-favoritos").style.transform = "translate(-2000px)";
+        document.body.style.overflowY = "scroll";
     }
-}
 
-function manejadorDeDobleClick(e){
     if(e.target.matches(".btn-favorito")){
 
         let color = e.target.nextElementSibling.textContent;
@@ -83,10 +101,12 @@ function manejadorDeDobleClick(e){
     }
 }
 
+function manejadorDeDobleClick(e){
+    
+}
+
 function manejadorDeScroll(e){
     let scrollValue = document.documentElement.scrollTop;
-
-    console.log(scrollValue)
 
     let btn = document.querySelector(".contenedor-btn-top");
 
@@ -111,9 +131,21 @@ function manejadorDeScroll(e){
 }
 
 function agregarColoresAlDOM (){
-    colores.forEach(color => {
-        agregarColor(color, "cargaInicial");
-    });
+
+    localStorage.clear()
+
+    if(localStorage.getItem("colores") === null){localStorage.setItem("colores", JSON.stringify(colores))}
+
+    if(localStorage.getItem("favoritos") === null){localStorage.setItem("favoritos", JSON.stringify(favoritos))}
+    
+
+
+    if(localStorage.getItem("colores")){
+        let coloresAlmacenados = JSON.parse(localStorage.getItem("colores"));
+        coloresAlmacenados.forEach(color => {
+            agregarColor(color, "cargaInicial");
+        });
+    }
 }
 
 function manejadorDeMouseover(e){
@@ -185,9 +217,89 @@ function agregarColor(color, carga){
     
 }
 
+function mostrarVentana(funcion){
+    
+    const div = crearContenedor();
+
+    estilosOverlay()
+
+    const botonCerrar = crearBotonCerrar("btn-cerrar-tecnologias");
+
+    document.querySelector(".overlay").appendChild(div);
+
+    setTimeout(() => {
+        div.style.transition = ".4s ease all";
+        div.style.transform = "scale(1)"
+    })
+
+    document.querySelector(".overlay").appendChild(botonCerrar)
+    document.body.style.overflowY = "hidden"
+
+    funcion(div)
+}
+
+
+const agregarElementosTecnologias = (div) =>{
+
+    const titulo = crearTitulo();
+    const img = crearImagen();
+    const parrafo = crearParrafos();
+
+    div.appendChild(img);
+    div.appendChild(titulo)
+    div.appendChild(parrafo)
+
+}
+
+const crearTitulo = () => {
+    const titulo = document.createElement("h2");
+    titulo.textContent = "Tecnologias";
+
+    return titulo;
+}
+
+const crearImagen = () => {
+    const img = document.createElement("img");
+    img.setAttribute("src", "./img/tecnologias.jpg");
+    img.style.borderTopLeftRadius = "5px";
+    img.style.borderTopRightRadius = "5px";
+    img.style.width = "100%";
+
+    return img;
+}
+
+const crearParrafos = () => {
+    const p = document.createElement("p");
+    p.textContent = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur?"
+    p.style.width = "90%"
+    p.style.textAlign = "justify";
+    return p;
+}
+
 const cargaInicial = (contenedor) => {
     contenedor.style.transform = "scale(0.8)"
     contenedor.style.opacity = "0"
+}
+
+const crearContenedor = () => {
+    const div = document.createElement("div"); 
+    div.style.width = "80%";
+    div.style.left = "absolute";
+    div.style.position = "fixed";
+    div.style.height = "90vh";
+    div.style.backgroundColor = "#F6F7F8";
+    div.style.zIndex = "10000";
+    div.style.borderRadius = "5px"
+    div.style.display = "flex";
+    div.style.flexDirection = "column";
+    div.style.justifyContent = "flex-start";
+    div.style.gap = "15px";
+    div.style.alignItems = "center";
+    div.style.transform = "scale(0.7)";
+    div.style.overflowY = "scroll";
+    div.style.boxShadow = "0 0 10px 3px #000"
+
+    return div;
 }
 
 const cargaDeAgregacion = (contenedor) => {
@@ -240,8 +352,16 @@ const activeOverlay = () => {
     overlay.style.zIndex = "99"
     overlay.style.position = "fixed"
 
-    mostrarMenu()
+}
 
+
+const estilosOverlay = () =>{
+    const overlay = document.querySelector(".overlay");
+    overlay.style.minHeight = "100%";
+    overlay.style.display = "flex";
+    overlay.style.justifyContent = "center";
+    overlay.style.alignItems = "center";
+    overlay.style.zIndex = "9999";
 }
 
 const mostrarMenu = () => {
@@ -249,19 +369,14 @@ const mostrarMenu = () => {
     menu.style.transform = "translate(0)";
     menu.style.transition = ".3s ease all";
 
+    document.body.style.overflowY = "hidden";
+
     estilosDelMenu(menu);
 }
 
 const estilosDelMenu = (menu) => {
 
-    const botonCerrar = document.createElement("img");
-    botonCerrar.src = "./img/boton.png";
-    botonCerrar.style.position = "fixed";
-    botonCerrar.style.top = "0"
-    botonCerrar.style.right = "0"
-    botonCerrar.style.margin = "10px";
-    botonCerrar.classList.add("btn-cerrar");
-    botonCerrar.style.cursor = "pointer";
+    const botonCerrar = crearBotonCerrar("btn-cerrar");
 
     menu.appendChild(botonCerrar)
     menu.style.overflowY = "scroll";
@@ -328,6 +443,19 @@ const copiarCodigoHexadecimal = (e) => {
 
 
     setTimeout(() => {codigo.textContent = ""; boton.removeAttribute("disabled")}, 3000)
+}
+
+const crearBotonCerrar= (clase) =>{
+    const botonCerrar = document.createElement("img");
+    botonCerrar.src = "./img/boton.png";
+    botonCerrar.style.position = "fixed";
+    botonCerrar.style.top = "0"
+    botonCerrar.style.right = "0"
+    botonCerrar.style.margin = "10px";
+    botonCerrar.classList.add(clase);
+    botonCerrar.style.cursor = "pointer";
+
+    return botonCerrar;
 }
 
 
