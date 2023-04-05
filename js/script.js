@@ -238,11 +238,10 @@ function mostrarVentana(funcion){
     funcion(div)
 }
 
-
+const img = crearImagen();
 const agregarElementosTecnologias = (div) =>{
 
     const titulo = crearTitulo();
-    const img = crearImagen();
     const parrafo = crearParrafos();
 
     div.appendChild(img);
@@ -258,7 +257,7 @@ const crearTitulo = () => {
     return titulo;
 }
 
-const crearImagen = () => {
+function crearImagen(){
     const img = document.createElement("img");
     img.setAttribute("src", "./img/tecnologias.jpg");
     img.style.borderTopLeftRadius = "5px";
