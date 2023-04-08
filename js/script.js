@@ -288,13 +288,31 @@ const agregarElementosTecnologias = (div) =>{
         {comando: "git push -u origin main", uso: "Se usa para empujar los archivos al repositorio."}
     ]
 
+    const comandosActualizacionRepositorio = [
+        {comando: "git status", uso: "Sirve para ver el estado de los archivos, si estan modificados, si se han agregado nuevos archivos y si se han eliminado archivos."},
+        {comando: "git add *", uso: "Se usa para añadir los elementos para posteriormente empujarlos."},
+        {comando: "git commit -m 'Descripción'", uso: "Se describe los cambios que se hicieron."},
+        {comando: "git push", uso: "Se usa cuando para subir o empujar los archivos al repositorio de GitHub."}
+    ]
+
     const titulo3 = crearTitulo("h3", "Comandos de Configuración", "left");
 
     const listaComandosConfiguracion = crearListaDeElementos(comandosConfig);
 
-    const titulo4 = crearTitulo("h3", "Como crear y vincular el repositorio con GitHub.", "left");
+    const titulo4 = crearTitulo("h3", "Como crear nuevo repositorio", "left");
 
     const listaComandosRepositorioNuevo = crearListaDeElementos(comandosNuevoRepositorio);
+
+    const titulo5 = crearTitulo("h3", "Actualizando el repositorio después de cambios", "left");
+
+    const listaComandosActualizarRepositorio = crearListaDeElementos(comandosActualizacionRepositorio);
+    
+    const contenedorLogosControlDeVersiones = crearContenedorLogos();
+
+    contenedorLogosControlDeVersiones.appendChild(crearLogo("./img/logo-git.png"));
+    contenedorLogosControlDeVersiones.appendChild(crearLogo("./img/logo-github.png"));
+    
+    const titulo6 = crearTitulo("h2", "Entorno de desarrollo o editor de texto", "left");
 
     div.appendChild(img);
     div.appendChild(titulo);
@@ -308,6 +326,10 @@ const agregarElementosTecnologias = (div) =>{
     div.appendChild(listaComandosConfiguracion);
     div.appendChild(titulo4);
     div.appendChild(listaComandosRepositorioNuevo);
+    div.appendChild(titulo5);
+    div.appendChild(listaComandosActualizarRepositorio);
+    div.appendChild(contenedorLogosControlDeVersiones);
+    div.appendChild(titulo6);
 
 
 }
