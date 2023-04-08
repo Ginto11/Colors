@@ -52,8 +52,10 @@ function manejadorDeClicks(e){
     }
 
     if(e.target.matches("#tecnologias")){
-        activeOverlay();
-        mostrarVentana(agregarElementosTecnologias);
+        document.body.style.overflowY = "hidden";
+        document.querySelector("#overlay-tecnologias").style.transform = "translateY(0)";
+        document.querySelector("#overlay-tecnologias").style.transition = ".8s ease all";
+        document.querySelector("#overlay-tecnologias").style.zIndex = "9999";
     }
 
     if(e.target.dataset.color){
@@ -62,16 +64,8 @@ function manejadorDeClicks(e){
 
     if(e.target.matches(".btn-cerrar-tecnologias")){
 
-        const img = document.querySelector(".overlay .btn-cerrar-tecnologias");
-        const div = document.querySelector(".overlay div");
-        const overlay = document.querySelector(".overlay");
-
-        overlay.removeChild(div);
-        overlay.removeChild(img);
-
+        document.querySelector("#overlay-tecnologias").style.transform = "translateY(-10000px)";
         document.body.style.overflowY = "scroll";
-
-        overlay.style.display = "none";
     }
 
     if(e.target.matches(".btn-cerrar")){
@@ -131,6 +125,8 @@ function manejadorDeScroll(e){
 }
 
 function agregarColoresAlDOM (){
+
+    mostrarVentana(agregarElementosTecnologias)
 
     localStorage.clear()
 
@@ -218,41 +214,149 @@ function agregarColor(color, carga){
 }
 
 function mostrarVentana(funcion){
+
     
     const div = crearContenedor();
 
-    estilosOverlay()
+    const overlay = crearOverlay();
 
     const botonCerrar = crearBotonCerrar("btn-cerrar-tecnologias");
 
-    document.querySelector(".overlay").appendChild(div);
+    overlay.appendChild(div);
 
-    setTimeout(() => {
-        div.style.transition = ".4s ease all";
-        div.style.transform = "scale(1)"
-    })
-
-    document.querySelector(".overlay").appendChild(botonCerrar)
-    document.body.style.overflowY = "hidden"
+    overlay.appendChild(botonCerrar)
 
     funcion(div)
+
+    document.body.appendChild(overlay)
 }
 
-const img = crearImagen();
 const agregarElementosTecnologias = (div) =>{
+    
+    const img = crearImagen();
+    const titulo = crearTitulo("h2", "Frontend", "left");
+    const parrafo1 = crearParrafo(`
+        Existen diferentes tecnologías del Frontend, que permiten el diseño de un sitio web como lo pueden ser HTML5, CSS3, JavaScript y
+        PHP que sirve para el Frontend y el Backend. Por otro lado también hay Frameworks, los cuales facilitan el 
+        desarrollo de ciertas formas. Pero en este sitio no se utilizó ningún Framework ni PHP, se utilizaron las tecnologías básicas
+        que son HTML5, CSS3 y JavaScript. La idea era generar más dinamismo por medio de la utilización del DOM (Document Object Model)
+        lo que la gran mayoría de elementos que se visualizan en el sitio son creados a partir de código puro de JavaScript.
+    `);
 
-    const titulo = crearTitulo();
-    const parrafo = crearParrafos();
+    const parrafo2 = crearParrafo(`
+        Fue realizada como una SPA (Single Page Aplication), esta es una aplicación de una sola página, o en su defecto de que tiene un 
+        solo documento HTML, el HTML faltante de se construye con JavaScript en tiempo real. Lo que mejora aún más la experiencia de usuario.
+    `);
+
+    const contenedorLogos = crearContenedorLogos();
+    const logoHTML = crearLogo("./img/logo_html.png");
+    const logoCSS = crearLogo("./img/logo_css.png");
+    const logoJavascript = crearLogo("./img/js-logo.png");
+
+    contenedorLogos.appendChild(logoHTML);
+    contenedorLogos.appendChild(logoCSS);
+    contenedorLogos.appendChild(logoJavascript);
+
+    const titulo2 = crearTitulo("h2", "Sistema de Control de Versiones", "left");
+
+    const parrafo3 = crearParrafo(`
+        Todo proyecto de desarrollo debe tener o usar un sistema de control de versiones, uno de los mas utilizados es Git, este nos 
+        permite ir actualizando nuestro proyecto en su respectivo repositorio el cual estaria en  GitHub. Tambien nos lleva un registro
+        de los commits que se han realizado hasta el momento y si en algun momento se necesita que el proyecto este en una version anterior
+        a la actual, con Git es muy sencillo hacerlo. Para utilizar Git se tiene que usar en conjunto con GitHub, ya que este ultimo es 
+        una plataforma para alojar proyectos de Desarrollo, con el fin de gestionar y controlar las versiones.
+    `);
+
+    const parrafo4 = crearParrafo(`
+        Existen muchisimos comandos en Git, primero nos centraremos en los comandos de configuracion estos son aquellos que se hacen despues de 
+        la instalacion de Git, esto configura el usuario y la contraseña para poder trabajar con los repositorios de GitHub.
+    `);
+
+    const comandosConfig = [
+        {comando: "git config --global user.name 'Nombre usuario'", uso: "Se usa para configurar el nombre de usuario de acuerdo al usuario de GitHub."},
+        {comando: "git config --global user.email 'Email usuario'", uso: "Se usa para configurar el email del usuario de acuerdo al email de GitHub."}
+
+    ]
+
+    const comandosNuevoRepositorio = [
+        {comando: "echo '# Prueba' >> README.md", uso: "En este archivo, se documenta nuestro proyecto."},
+        {comando: "git init", uso: "Inicializa un repositorio."},
+        {comando: "git remote add origin 'Link del repositorio'", uso: "Este repositorio va estar vinculado al repositorio de Github."},
+        {comando: "git add README.md", uso: "Se añade el archivo al repositorio."},
+        {comando: "git commit -m 'Primer commit'", uso: "Se usa para agregarle una descripción de lo que se realizó en el proyecto."},
+        {comando: "git branch -M main", uso: "Se usa para cambiar a la rama principal (main)."},
+        {comando: "git push -u origin main", uso: "Se usa para empujar los archivos al repositorio."}
+    ]
+
+    const titulo3 = crearTitulo("h3", "Comandos de Configuración", "left");
+
+    const listaComandosConfiguracion = crearListaDeElementos(comandosConfig);
+
+    const titulo4 = crearTitulo("h3", "Como crear y vincular el repositorio con GitHub.", "left");
+
+    const listaComandosRepositorioNuevo = crearListaDeElementos(comandosNuevoRepositorio);
 
     div.appendChild(img);
-    div.appendChild(titulo)
-    div.appendChild(parrafo)
+    div.appendChild(titulo);
+    div.appendChild(parrafo1);
+    div.appendChild(parrafo2);
+    div.appendChild(contenedorLogos);
+    div.appendChild(titulo2);
+    div.appendChild(parrafo3);
+    div.appendChild(parrafo4);
+    div.appendChild(titulo3);
+    div.appendChild(listaComandosConfiguracion);
+    div.appendChild(titulo4);
+    div.appendChild(listaComandosRepositorioNuevo);
+
 
 }
 
-const crearTitulo = () => {
-    const titulo = document.createElement("h2");
-    titulo.textContent = "Tecnologias";
+const crearListaDeElementos = (arreglo) => {
+    const contenedorLista = document.createElement("p");
+    contenedorLista.style.width = "85%"
+    const listaComandos = document.createElement("ul");
+    arreglo.forEach(el => {
+        const li = document.createElement("li");
+        li.textContent = `${el.comando} : ${el.uso}`
+
+        listaComandos.appendChild(li);
+    })
+    contenedorLista.appendChild(listaComandos);
+    return contenedorLista;
+}
+
+const crearLogo = (ruta) => {
+
+    const contenedorLogo = document.createElement("div");
+    contenedorLogo.style.width = "130px";
+
+    const logo = document.createElement("img");
+    logo.src = ruta
+    logo.style.width = "100%";
+    logo.style.height = "130px"
+    logo.style.filter = "drop-shadow(0 0 3px #000)";
+
+    contenedorLogo.appendChild(logo);
+
+    return contenedorLogo;
+}
+
+const crearContenedorLogos = () => {
+    const contenedor = document.createElement("div");
+    contenedor.style.display = "flex";
+    contenedor.style.marginTop = "30px";
+    contenedor.style.justifyContent = "space-around";
+    contenedor.style.width = "90%";
+
+    return contenedor;
+}
+
+const crearTitulo = (etiqueta, texto, alineacion) => {
+    const titulo = document.createElement(etiqueta);
+    titulo.style.width = "90%"
+    titulo.textContent = texto;
+    titulo.style.textAlign = alineacion;
 
     return titulo;
 }
@@ -261,17 +365,16 @@ function crearImagen(){
     const img = document.createElement("img");
     img.setAttribute("src", "./img/tecnologias.jpg");
     img.style.borderTopLeftRadius = "5px";
-    img.style.borderTopRightRadius = "5px";
     img.style.width = "100%";
 
     return img;
 }
 
-const crearParrafos = () => {
+const crearParrafo = (texto) => {
     const p = document.createElement("p");
-    p.textContent = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur? Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit fugit eaque dolores autem fuga, odio iste perferendis obcaecati adipisci distinctio! Eaque voluptates animi doloribus cumque impedit eveniet dolorum tenetur consequuntur?"
+    p.textContent = texto;
+    p.style.textAlign = "justify"
     p.style.width = "90%"
-    p.style.textAlign = "justify";
     return p;
 }
 
@@ -294,7 +397,6 @@ const crearContenedor = () => {
     div.style.justifyContent = "flex-start";
     div.style.gap = "15px";
     div.style.alignItems = "center";
-    div.style.transform = "scale(0.7)";
     div.style.overflowY = "scroll";
     div.style.boxShadow = "0 0 10px 3px #000"
 
@@ -457,6 +559,23 @@ const crearBotonCerrar= (clase) =>{
     return botonCerrar;
 }
 
+
+const crearOverlay = () => {
+    const overlay = document.createElement("div");
+    overlay.setAttribute("id", "overlay-tecnologias");              
+    overlay.style.width = "100%";
+    overlay.style.display = "flex";
+    overlay.style.flexDirection = "column"
+    overlay.style.justifyContent = "center";
+    overlay.style.alignItems = "center";
+    overlay.style.height = "100vh";
+    overlay.style.backgroundColor = "#0008";
+    overlay.style.position = "fixed";
+    overlay.style.zIndex = "-1"
+    overlay.style.transform = "translateY(-1000px)";
+
+    return overlay;
+}
 
 
 
