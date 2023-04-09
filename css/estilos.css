@@ -10,6 +10,18 @@ p {
     line-height: 1.8;
 }
 
+#overlay-tecnologias div::-webkit-scrollbar{
+    width: 7px;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+#overlay-tecnologias div::-webkit-scrollbar-thumb{
+    width: 7px;
+    background-color: #000;
+    border-radius: 4px;
+}
+
 body{
     width: 100%;
     min-height: 100vh;

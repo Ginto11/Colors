@@ -1,4 +1,4 @@
-let colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9", "#F8C304", "#04558A", "#F4A300", "#CD4450", "#340763"]
+let colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9", "#F8C304", "#04558A", "#F4A300", "#CD4450", "#340763", "#1A5C6C", "#0A3B47", "#1F8384", "#59EBCB", "#34495E", "#212040", "#008080", "#B4D9F3"]
 let favoritos = ["#C2AFF0", "#280C49", "#686868", "#0370B7", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"];
 
 document.addEventListener("click", (e) => manejadorDeClicks(e));
@@ -9,8 +9,13 @@ document.addEventListener("mouseover", (e) => manejadorDeMouseover(e));
 document.addEventListener("mouseout", (e) => manejadorDeMouseout(e));
 
 function manejadorDeClicks(e){
-    e.preventDefault();
 
+    if(e.target.matches(".link")){
+        return;
+    }
+
+    e.preventDefault();
+    
     if(e.target.id === "btn-agregar"){
 
         let color = document.getElementById("color").value;
@@ -209,8 +214,6 @@ function agregarColor(color, carga){
         contenedor.style.opacity = "1"
     }, 100)
 
-
-    
 }
 
 function mostrarVentana(funcion){
@@ -232,6 +235,8 @@ function mostrarVentana(funcion){
 }
 
 const agregarElementosTecnologias = (div) =>{
+
+    console.log(div.querySelectorAll("*"));
     
     const img = crearImagen();
     const titulo = crearTitulo("h2", "Frontend", "left");
@@ -248,7 +253,7 @@ const agregarElementosTecnologias = (div) =>{
         solo documento HTML, el HTML faltante de se construye con JavaScript en tiempo real. Lo que mejora aún más la experiencia de usuario.
     `);
 
-    const contenedorLogos = crearContenedorLogos();
+    const contenedorLogos = crearContenedorImagen("space-around");
     const logoHTML = crearLogo("./img/logo_html.png");
     const logoCSS = crearLogo("./img/logo_css.png");
     const logoJavascript = crearLogo("./img/js-logo.png");
@@ -307,12 +312,23 @@ const agregarElementosTecnologias = (div) =>{
 
     const listaComandosActualizarRepositorio = crearListaDeElementos(comandosActualizacionRepositorio);
     
-    const contenedorLogosControlDeVersiones = crearContenedorLogos();
+    const contenedorLogosControlDeVersiones = crearContenedorImagen("space-around");
 
     contenedorLogosControlDeVersiones.appendChild(crearLogo("./img/logo-git.png"));
     contenedorLogosControlDeVersiones.appendChild(crearLogo("./img/logo-github.png"));
     
     const titulo6 = crearTitulo("h2", "Entorno de desarrollo o editor de texto", "left");
+
+    const parrafo5 = crearParrafo(`
+        El entorno de desarrollo utilizado en este proyecto fue Visual Studio Code, este es un editor de texto, el cual nos permite la instalacion
+        de extensiones, estas ofrecen muchas funcionalidades como por ejemplo: La organizacion de codigo, hay extensiones que nos permiten
+        trabajar con snippets de ciertos lenguages, e instalar herramientas que funcionan con ciertos lenguages, solo nos tocaria instalarlas y ya, 
+        tambien por otro lado facilita la organizacion de un proyecto.
+    `);
+
+    const contenedorImagenVSC = crearContenedorImagen("flex-start");
+    contenedorImagenVSC.appendChild(crearImagenSection("./img/vsc.png"));
+    contenedorImagenVSC.style.marginBottom = "30px";
 
     div.appendChild(img);
     div.appendChild(titulo);
@@ -330,8 +346,18 @@ const agregarElementosTecnologias = (div) =>{
     div.appendChild(listaComandosActualizarRepositorio);
     div.appendChild(contenedorLogosControlDeVersiones);
     div.appendChild(titulo6);
+    div.appendChild(parrafo5);
+    div.appendChild(contenedorImagenVSC);
 
+}
 
+const crearImagenSection = (ruta) => {
+    const img = document.createElement("img");
+    img.src = ruta;
+    img.style.width = "90%"
+    img.style.borderRadius = "10px";
+
+    return img;
 }
 
 const crearListaDeElementos = (arreglo) => {
@@ -340,7 +366,7 @@ const crearListaDeElementos = (arreglo) => {
     const listaComandos = document.createElement("ul");
     arreglo.forEach(el => {
         const li = document.createElement("li");
-        li.textContent = `${el.comando} : ${el.uso}`
+        li.innerHTML = `<i style="background-color: #03254E; padding: 3px 5px; color: #F77737; border-radius: 8px; margin-right: 4px;"> ${el.comando} : </i> ${el.uso}`
 
         listaComandos.appendChild(li);
     })
@@ -364,11 +390,10 @@ const crearLogo = (ruta) => {
     return contenedorLogo;
 }
 
-const crearContenedorLogos = () => {
+const crearContenedorImagen = (alineacion) => {
     const contenedor = document.createElement("div");
     contenedor.style.display = "flex";
-    contenedor.style.marginTop = "30px";
-    contenedor.style.justifyContent = "space-around";
+    contenedor.style.justifyContent = alineacion;
     contenedor.style.width = "90%";
 
     return contenedor;
