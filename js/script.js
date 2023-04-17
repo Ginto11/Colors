@@ -15,6 +15,15 @@ function manejadorDeClicks(e){
     }
 
     e.preventDefault();
+
+    if(e.target.id === "acerca"){
+        moverVentana("overlay-about");
+        
+    }
+
+    if(e.target.matches(".btn-cerrar-about")){
+        ocularVentana("overlay-about")
+    }
     
     if(e.target.id === "btn-agregar"){
 
@@ -57,10 +66,7 @@ function manejadorDeClicks(e){
     }
 
     if(e.target.matches("#tecnologias")){
-        document.body.style.overflowY = "hidden";
-        document.querySelector("#overlay-tecnologias").style.transform = "translateY(0)";
-        document.querySelector("#overlay-tecnologias").style.transition = ".8s ease all";
-        document.querySelector("#overlay-tecnologias").style.zIndex = "9999";
+        moverVentana("overlay-tecnologias")
     }
 
     if(e.target.dataset.color){
@@ -69,8 +75,7 @@ function manejadorDeClicks(e){
 
     if(e.target.matches(".btn-cerrar-tecnologias")){
 
-        document.querySelector("#overlay-tecnologias").style.transform = "translateY(-10000px)";
-        document.body.style.overflowY = "scroll";
+        ocularVentana("overlay-tecnologias")
     }
 
     if(e.target.matches(".btn-cerrar")){
@@ -100,10 +105,6 @@ function manejadorDeClicks(e){
     }
 }
 
-function manejadorDeDobleClick(e){
-    
-}
-
 function manejadorDeScroll(e){
     let scrollValue = document.documentElement.scrollTop;
 
@@ -130,8 +131,8 @@ function manejadorDeScroll(e){
 }
 
 function agregarColoresAlDOM (){
-
-    mostrarVentana(agregarElementosTecnologias)
+    crearVentanaSegundoPlano(agregarElementosAbout, "overlay-about", "btn-cerrar-about");
+    crearVentanaSegundoPlano(agregarElementosTecnologias, "overlay-tecnologias", "btn-cerrar-tecnologias")
 
     localStorage.clear()
 
@@ -187,6 +188,11 @@ function manejadorDeMouseout(e){
     }
 }
 
+/**
+ * FUNCION QUE AGREGA EL COLOR AL DOM, DE ACUERDO A SI ES CARGA INICIAL DEL DOCUMENTO O ES POR UN EVENTO CLICK
+ * @param {string} color 
+ * @param {string} carga 
+ */
 function agregarColor(color, carga){
     let contenedor = document.createElement("div");
     let contenedorColor = document.createElement("button");
@@ -216,14 +222,20 @@ function agregarColor(color, carga){
 
 }
 
-function mostrarVentana(funcion){
+/**
+ * FUNCION QUE CREA LA VENTANA U OVERLAY EN UNA POSICION EN LA QUE EL USUARIO NO LA VEA
+ * @param {function} funcion RECIBE UNA FUNCION PARA AGREGAR LOS ELEMENTOS AL CONTENEDOR DEL OVERLAY.
+ * @param {string} idOverlay RECIBE EL ID DEL OVERLAY QUE SE VA CREAR
+ * @param {string} idBtnCerrar RECIBE EL ID DEL BTN-CERRAR
+ */
+function crearVentanaSegundoPlano(funcion, idOverlay, idBtnCerrar){
 
     
     const div = crearContenedor();
 
-    const overlay = crearOverlay();
+    const overlay = crearOverlay(idOverlay);
 
-    const botonCerrar = crearBotonCerrar("btn-cerrar-tecnologias");
+    const botonCerrar = crearBotonCerrar(idBtnCerrar);
 
     overlay.appendChild(div);
 
@@ -234,11 +246,60 @@ function mostrarVentana(funcion){
     document.body.appendChild(overlay)
 }
 
+const agregarElementosAbout = (div) => {
+    const img = crearImagen("./img/about1.png");
+    const titulo = crearTitulo("h2", "Acerca de", "left");
+    const parrafo1 = crearParrafo(`
+        Este proyecto se creo con el fin de agilizar el proceso de desarrollo de otros proyectos
+        personales, esto debido a que muchas veces se realizan proyectos de desarrollo y no se tiene muy claro que colores 
+        se pueden usar en la interfaz de usuario, por lo que este sitio permite agregar colores, pueden ser de prueba, y si algun color 
+        es de uso frecuente se puede añadir al menu de favotios, en donde se puede copiar el codigo Hexadecimal de color seleccionado al 
+        portapapeles. 
+    `);
+
+    const titulo2 = crearTitulo("h2", "Datos Importantes", "left");
+
+    const datos = [
+        {valor1: "Autor", valor2: "Nelson Muñoz"},
+        {valor1: "Cargo o profesión:", valor2: "Estudiante de Ingenieria de Sistemas"},   
+        {valor1: "Pais", valor2: "Colombia"},
+        {valor1: "Ciudad", valor2: "Bogotá D.C"},
+        {valor1: "Youtube", valor2: "GustoPorLaProgramación"},
+        {valor1: "GitHub", valor2: "Ginto11"},
+        {valor1: "TikTok", valor2: "nelsonmunoz11"},
+        {valor1: "Repositorio", valor2: "https://github.com/Ginto11/Colors"}
+    ]
+
+    const listaDatosImportantes = crearListaDeElementos(datos);
+
+    const titulo3 = crearTitulo("h2", "Actualizaciones", "left");
+
+    const parrafo3 = crearParrafo(`
+        Este sitio es mejorable en muchos sentidos por ejemplo, desarrollar el Backend, ya sea una API REST, o una base de datos,
+        tambien del lado del Fronted desarrollarlo todo con un Framework en especifico, añadir mas interacciones de usuarios.
+        Entre muchas cosas mas que van incluidas en la imaginación.
+    `);
+
+    parrafo3.style.marginBottom = "30px";                   
+
+
+    div.appendChild(img);
+    div.appendChild(titulo);
+    div.appendChild(parrafo1);
+    div.appendChild(titulo2);
+    div.appendChild(listaDatosImportantes);
+    div.appendChild(titulo3);
+    div.appendChild(parrafo3);
+}
+
+/**
+ * FUNCION QUE AGREGA LOS ELEMENTOS A LA VENTANA QUE ESTA EN EL OVERLAY Y RECIBE COMO PARAMETRO
+ * @param {elemento} div CONTENEDOR DE LA VENTANA
+ */
 const agregarElementosTecnologias = (div) =>{
 
-    console.log(div.querySelectorAll("*"));
     
-    const img = crearImagen();
+    const img = crearImagen("./img/tecnologias.jpg");
     const titulo = crearTitulo("h2", "Frontend", "left");
     const parrafo1 = crearParrafo(`
         Existen diferentes tecnologías del Frontend, que permiten el diseño de un sitio web como lo pueden ser HTML5, CSS3, JavaScript y
@@ -278,26 +339,26 @@ const agregarElementosTecnologias = (div) =>{
     `);
 
     const comandosConfig = [
-        {comando: "git config --global user.name 'Nombre usuario'", uso: "Se usa para configurar el nombre de usuario de acuerdo al usuario de GitHub."},
-        {comando: "git config --global user.email 'Email usuario'", uso: "Se usa para configurar el email del usuario de acuerdo al email de GitHub."}
+        {valor1: "git config --global user.name 'Nombre usuario'", valor2: "Se usa para configurar el nombre de usuario de acuerdo al usuario de GitHub."},
+        {valor1: "git config --global user.email 'Email usuario'", valor2: "Se usa para configurar el email del usuario de acuerdo al email de GitHub."}
 
     ]
 
     const comandosNuevoRepositorio = [
-        {comando: "echo '# Prueba' >> README.md", uso: "En este archivo, se documenta nuestro proyecto."},
-        {comando: "git init", uso: "Inicializa un repositorio."},
-        {comando: "git remote add origin 'Link del repositorio'", uso: "Este repositorio va estar vinculado al repositorio de Github."},
-        {comando: "git add README.md", uso: "Se añade el archivo al repositorio."},
-        {comando: "git commit -m 'Primer commit'", uso: "Se usa para agregarle una descripción de lo que se realizó en el proyecto."},
-        {comando: "git branch -M main", uso: "Se usa para cambiar a la rama principal (main)."},
-        {comando: "git push -u origin main", uso: "Se usa para empujar los archivos al repositorio."}
+        {valor1: "echo '# Prueba' >> README.md", valor2: "En este archivo, se documenta nuestro proyecto."},
+        {valor1: "git init", valor2: "Inicializa un repositorio."},
+        {valor1: "git remote add origin 'Link del repositorio'", valor2: "Este repositorio va estar vinculado al repositorio de Github."},
+        {valor1: "git add README.md", valor2: "Se añade el archivo al repositorio."},
+        {valor1: "git commit -m 'Primer commit'", valor2: "Se usa para agregarle una descripción de lo que se realizó en el proyecto."},
+        {valor1: "git branch -M main", valor2: "Se usa para cambiar a la rama principal (main)."},
+        {valor1: "git push -u origin main", valor2: "Se usa para empujar los archivos al repositorio."}
     ]
 
     const comandosActualizacionRepositorio = [
-        {comando: "git status", uso: "Sirve para ver el estado de los archivos, si estan modificados, si se han agregado nuevos archivos y si se han eliminado archivos."},
-        {comando: "git add *", uso: "Se usa para añadir los elementos para posteriormente empujarlos."},
-        {comando: "git commit -m 'Descripción'", uso: "Se describe los cambios que se hicieron."},
-        {comando: "git push", uso: "Se usa cuando para subir o empujar los archivos al repositorio de GitHub."}
+        {valor1: "git status", valor2: "Sirve para ver el estado de los archivos, si estan modificados, si se han agregado nuevos archivos y si se han eliminado archivos."},
+        {valor1: "git add *", valor2: "Se usa para añadir los elementos para posteriormente empujarlos."},
+        {valor1: "git commit -m 'Descripción'", valor2: "Se describe los cambios que se hicieron."},
+        {valor1: "git push", valor2: "Se usa cuando para subir o empujar los archivos al repositorio de GitHub."}
     ]
 
     const titulo3 = crearTitulo("h3", "Comandos de Configuración", "left");
@@ -351,8 +412,37 @@ const agregarElementosTecnologias = (div) =>{
 
 }
 
+/**
+ * FUNCION QUE MUEVE EL OVERLAY PARA SER MOSTRADO AL USUARIO
+ * @param {string} id ESTE ID ES EL DEL OVERLAY CREADO
+ */
+const moverVentana = (id) =>{
+    document.body.style.overflowY = "hidden";
+    console.log(document.querySelector(`#${id}`))
+    document.querySelector(`#${id}`).style.transform = "translateY(0)";
+    document.querySelector(`#${id}`).style.transition = ".8s ease all";
+    document.querySelector(`#${id}`).style.zIndex = "9999";
+}
+
+
+/**
+ * FUNCION QUE ME OCULTA LA VENTANA PARA QUE NO SEA VISTA POR EL USUARIO
+ * @param {string} id RECIBE EL ID DEL OVERLAY
+ */
+const ocularVentana = (id) => {
+    document.querySelector(`#${id}`).style.transform = "translateY(-10000px)";
+    document.body.style.overflowY = "scroll";
+}
+
+
+/**
+ * FUNCION QUE CREA UNA IMAGEN DE ACUERDO AL PARAMETRO QUE SE LE PASE
+ * @param {string} ruta RUTA DE DONDE SE ENCUENTRA LA IMAGEN
+ * @returns Imagen
+ */
 const crearImagenSection = (ruta) => {
     const img = document.createElement("img");
+    img.alt = "Imagen no encontrada"
     img.src = ruta;
     img.style.width = "90%"
     img.style.borderRadius = "10px";
@@ -360,13 +450,18 @@ const crearImagenSection = (ruta) => {
     return img;
 }
 
+/**
+ * FUNCION QUE CREA UNA LISTA DE ELEMENTOS LI
+ * @param {array} arreglo RECIBE ARREGLO PARA SER CREADO
+ * @returns CONTENEDOR LISTA, Y ADENTRO ESTA LA LISTA
+ */
 const crearListaDeElementos = (arreglo) => {
     const contenedorLista = document.createElement("p");
     contenedorLista.style.width = "85%"
     const listaComandos = document.createElement("ul");
     arreglo.forEach(el => {
         const li = document.createElement("li");
-        li.innerHTML = `<i style="background-color: #03254E; padding: 3px 5px; color: #F77737; border-radius: 8px; margin-right: 4px;"> ${el.comando} : </i> ${el.uso}`
+        li.innerHTML = `<i style="background-color: #03254E; padding: 3px 5px; color: #F77737; border-radius: 8px; margin-right: 4px;"> ${el.valor1} : </i> ${el.valor2}`
 
         listaComandos.appendChild(li);
     })
@@ -374,6 +469,11 @@ const crearListaDeElementos = (arreglo) => {
     return contenedorLista;
 }
 
+/**
+ * FUNCION QUE CREA EL LOGO
+ * @param {string} ruta SE LE PASA LA RUTA DEL LOGO
+ * @returns CONTENEDOR LOGO Y ADENTRO ESTA EL LOGO
+ */
 const crearLogo = (ruta) => {
 
     const contenedorLogo = document.createElement("div");
@@ -390,6 +490,11 @@ const crearLogo = (ruta) => {
     return contenedorLogo;
 }
 
+/**
+ * FUNCION QUE CREA EL CONTENEDOR DE LA IMAGEN
+ * @param {string} alineacion RECIBE LA ALINEACION DE LA IMAGEN
+ * @returns CONTENEDOR Y ADENTRO ESTA LA IMAGEN
+ */
 const crearContenedorImagen = (alineacion) => {
     const contenedor = document.createElement("div");
     contenedor.style.display = "flex";
@@ -399,6 +504,13 @@ const crearContenedorImagen = (alineacion) => {
     return contenedor;
 }
 
+/**
+ * FUNCION QUE CREA EL TITULO
+ * @param {string} etiqueta RECIBE EL ELEMENTO O LA ETIQUETA 
+ * @param {string} texto RECIBE EL TEXTO QUE VA ADENTRO DE LA ETIQUETA
+ * @param {string} alineacion RECIBE LA ALINEACION DEL TEXTO DE LA ETIQUETA
+ * @returns TITULO
+ */
 const crearTitulo = (etiqueta, texto, alineacion) => {
     const titulo = document.createElement(etiqueta);
     titulo.style.width = "90%"
@@ -408,15 +520,26 @@ const crearTitulo = (etiqueta, texto, alineacion) => {
     return titulo;
 }
 
-function crearImagen(){
+/**
+ * FUNCION QUE CREA LA IMAGEN DEL ENCABEZADO DE LA VENTANA
+ * @param {string} ruta RECIBE LA RUTA DE LA IMAGEN
+ * @returns IMAGEN
+ */
+function crearImagen(ruta){
     const img = document.createElement("img");
-    img.setAttribute("src", "./img/tecnologias.jpg");
+    img.setAttribute("src", ruta);
+    img.setAttribute("alt", "Imagen no encontrada");
     img.style.borderTopLeftRadius = "5px";
     img.style.width = "100%";
 
     return img;
 }
 
+/**
+ * FUNCION QUE CREA UN PARRAFO
+ * @param {string} texto RECIBE EL TEXTO COMO PARAMETRO 
+ * @returns ELEMENTO P
+ */
 const crearParrafo = (texto) => {
     const p = document.createElement("p");
     p.textContent = texto;
@@ -425,11 +548,20 @@ const crearParrafo = (texto) => {
     return p;
 }
 
+
+/**
+ * FUNCION QUE ME CARGA LOS COLORES AL DOM
+ * @param {elemento} contenedor RCIBE EL CONTENEDOR DE COLORES
+ */
 const cargaInicial = (contenedor) => {
     contenedor.style.transform = "scale(0.8)"
     contenedor.style.opacity = "0"
 }
 
+/**
+ * FUNCION QUE ME CREA UN CONTENEDOR, EL CUAL VA EN LA VENTANA
+ * @returns ELEMENTO DIV
+ */
 const crearContenedor = () => {
     const div = document.createElement("div"); 
     div.style.width = "80%";
@@ -450,12 +582,20 @@ const crearContenedor = () => {
     return div;
 }
 
+/**
+ * FUNCION QUE ME AGREGA LOS COLORES DE ACUERDO AL EVENTO CLICK
+ * @param {elemento} contenedor RECIBE EL CONTENEDOR COMO PARAMETRO
+ */
 const cargaDeAgregacion = (contenedor) => {
     contenedor.style.transform = "scale(0.8)";
     contenedor.style.opacity = "0";
     contenedor.style.transform = "translateX(-70px)";
 }
 
+/**
+ * FUNCION QUE AGREGA ESTILOS AL CONTENEDOR
+ * @param {elemento} contenedor RECIBE EL CONTENEDOR DE LA VENTANA
+ */
 const estilosDeContenedor = (contenedor) => {
     contenedor.style.width = "25%";
     contenedor.style.height = "170px";
@@ -469,6 +609,12 @@ const estilosDeContenedor = (contenedor) => {
     contenedor.style.transition = ".5s ease all";
 }
 
+
+/**
+ * FUNCION QUE ME AGREGA LOS ESTILOS AL CONTENEDOR DE COLOR
+ * @param {elemento} contenedorColor RECIBE EL CONTENEDOR DE COLOR
+ * @param {string} color RECIBE EL COLOR
+ */
 const estilosDeContenedorDeColor = (contenedorColor, color) => {
     contenedorColor.classList.add("btn-favorito")
     contenedorColor.style.width = "100%";
@@ -478,9 +624,14 @@ const estilosDeContenedorDeColor = (contenedorColor, color) => {
     contenedorColor.style.boxShadow = "3px 3px 10px #0004 inset";
     contenedorColor.style.cursor = "pointer";
     contenedorColor.style.border = "none"
-    contenedorColor.setAttribute("title", "👉 Hacer doble click para agregar a favoritos ✨");
+    contenedorColor.setAttribute("title", "👉 Hacer click para agregar a favoritos ✨");
 }
 
+/**
+ * FUNCION QUE AGREGA LOS ESTILOS DEL CODIGO, DEL CONTENEDOR DE COLOR 
+ * @param {elemento} strong RECIBE ELEMENTO DONDE SE AGREGA EL CODIGO 
+ * @param {string} color RECIBE EL CODIGO DEL COLOR
+ */
 const estilosDeCodigo = (strong , color) => {
     strong.textContent = color;
     strong.style.width = "100% !important";
@@ -489,6 +640,9 @@ const estilosDeCodigo = (strong , color) => {
     strong.style.userSelect = "text";
 }
 
+/**
+ * FUNCION QUE ACTIVA EL OVERLAY DE COLORES FAVORITOS
+ */
 const activeOverlay = () => {
 
     const overlay = document.querySelector(".overlay");
@@ -502,7 +656,9 @@ const activeOverlay = () => {
 
 }
 
-
+/**
+ * FUNCION QUE AGREGA ESTILOS AL OVERLAY DE COLORES FAVORITOS
+ */
 const estilosOverlay = () =>{
     const overlay = document.querySelector(".overlay");
     overlay.style.minHeight = "100%";
@@ -512,6 +668,9 @@ const estilosOverlay = () =>{
     overlay.style.zIndex = "9999";
 }
 
+/**
+ * FUNCION QUE MUESTRA EL MENU DE COLORES FAVORITOS
+ */
 const mostrarMenu = () => {
     const menu = document.querySelector(".colores-favoritos");
     menu.style.transform = "translate(0)";
@@ -522,6 +681,10 @@ const mostrarMenu = () => {
     estilosDelMenu(menu);
 }
 
+/**
+ * FUNCION QUE AGREGA ESTILOS AL MENU DE COLORES FAVORITOS
+ * @param {elemento} menu RECIBE EL MENU 
+ */
 const estilosDelMenu = (menu) => {
 
     const botonCerrar = crearBotonCerrar("btn-cerrar");
@@ -575,6 +738,10 @@ const estilosDelMenu = (menu) => {
     })
 }
 
+/**
+ * FUNCION QUE COPIA EL CODIGO DEL COLOR AL PORTAPAPELES
+ * @param {object} e RECIBE EL EVENTO CLICK Y DE AHI SE SACA EL ELEMENTO
+ */
 const copiarCodigoHexadecimal = (e) => {
     const codigo = document.createElement("p");
     const elementoPadreDelBtnCopiar = e.target.parentElement;
@@ -593,6 +760,11 @@ const copiarCodigoHexadecimal = (e) => {
     setTimeout(() => {codigo.textContent = ""; boton.removeAttribute("disabled")}, 3000)
 }
 
+/**
+ * FUNCION QUE CREA EL BOTON CERRAR DEL OVERLAY
+ * @param {string} clase RECIBE LA CLASE QUE VA TENER EL BOTON
+ * @returns ELEMEMTO IMG
+ */
 const crearBotonCerrar= (clase) =>{
     const botonCerrar = document.createElement("img");
     botonCerrar.src = "./img/boton.png";
@@ -606,10 +778,14 @@ const crearBotonCerrar= (clase) =>{
     return botonCerrar;
 }
 
-
-const crearOverlay = () => {
+/**
+ * FUNCION QUE CREA OVERLAY 
+ * @param {string} id RECIBE EL ID QUE VA TENER EL OVERLAY
+ * @returns OVERLAY
+ */
+const crearOverlay = (id) => {
     const overlay = document.createElement("div");
-    overlay.setAttribute("id", "overlay-tecnologias");              
+    overlay.setAttribute("id", id);              
     overlay.style.width = "100%";
     overlay.style.display = "flex";
     overlay.style.flexDirection = "column"
