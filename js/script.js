@@ -250,11 +250,11 @@ const agregarElementosAbout = (div) => {
     const img = crearImagen("./img/about1.png");
     const titulo = crearTitulo("h2", "Acerca de", "left");
     const parrafo1 = crearParrafo(`
-        Este proyecto se creo con el fin de agilizar el proceso de desarrollo de otros proyectos
+        Este proyecto se creó con el fin de agilizar el proceso de desarrollo de otros proyectos
         personales, esto debido a que muchas veces se realizan proyectos de desarrollo y no se tiene muy claro que colores 
-        se pueden usar en la interfaz de usuario, por lo que este sitio permite agregar colores, pueden ser de prueba, y si algun color 
-        es de uso frecuente se puede añadir al menu de favotios, en donde se puede copiar el codigo Hexadecimal de color seleccionado al 
-        portapapeles. 
+        se pueden usar en la interfaz de usuario, por lo que este sitio permite agregar colores, pueden ser de prueba, y si algún color 
+        es de uso frecuente se puede añadir al menú de favoritos, en donde se puede copiar el código Hexadecimal de color seleccionado al 
+        portapapeles.
     `);
 
     const titulo2 = crearTitulo("h2", "Datos Importantes", "left");
@@ -276,8 +276,8 @@ const agregarElementosAbout = (div) => {
 
     const parrafo3 = crearParrafo(`
         Este sitio es mejorable en muchos sentidos por ejemplo, desarrollar el Backend, ya sea una API REST, o una base de datos,
-        tambien del lado del Fronted desarrollarlo todo con un Framework en especifico, añadir mas interacciones de usuarios.
-        Entre muchas cosas mas que van incluidas en la imaginación.
+        también del lado del Fronted desarrollarlo todo con un Framework en específico, añadir más interacciones de usuarios.
+        Entre muchas cosas más que van incluidas en la imaginación.
     `);
 
     parrafo3.style.marginBottom = "30px";                   
