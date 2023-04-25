@@ -230,7 +230,7 @@ p{
     height: 30px;
 }
 
-.contenedor-inicial form input[type="text"]{
+.contenedor-inicial form .input-color{
     text-indent: 20px;
     width: 60%;
     outline: none;
@@ -239,7 +239,7 @@ p{
     transition: .4s ease all;
 }
 
-.contenedor-inicial form input[type="submit"]{
+.contenedor-inicial form .input-agregar, .input-agregar-gradiente{
     width: 100px;
     border: 2px solid #000;
     height: 33px;

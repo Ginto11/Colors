@@ -2,9 +2,8 @@ let colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49",
 let favoritos = ["#C2AFF0", "#280C49", "#686868", "#0370B7", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"];
 
 document.addEventListener("click", (e) => manejadorDeClicks(e));
-document.addEventListener("dblclick", (e) => manejadorDeDobleClick(e));
 document.addEventListener("scroll", (e) => manejadorDeScroll(e));
-document.addEventListener("DOMContentLoaded", agregarColoresAlDOM);
+document.addEventListener("DOMContentLoaded", eventosAlCargarDOM);
 document.addEventListener("mouseover", (e) => manejadorDeMouseover(e));
 document.addEventListener("mouseout", (e) => manejadorDeMouseout(e));
 
@@ -12,6 +11,59 @@ function manejadorDeClicks(e){
 
     if(e.target.matches(".link")){
         return;
+    }
+
+    if(e.target.matches("#color-unico")){
+
+        const elementoPadre = e.target.parentElement;
+        if(e.target.checked == true){
+
+            checkboxStyleSelected(elementoPadre);
+
+            document.querySelector("#color-gradiente").nextElementSibling.style.color = "#0006"
+            document.querySelector(".contenedor-color-unico").style.display = "block";  
+            document.getElementById("color-gradiente").disabled = "true";
+            return;
+        }
+
+        checkboxStyleNoSelected(e.target.parentElement)
+        document.querySelector("#color-gradiente").nextElementSibling.style.color = "#000"
+        document.querySelector(".contenedor-color-unico").style.display = "none";
+        document.getElementById("color-gradiente").removeAttribute("disabled");
+        return;
+    }
+
+    if(e.target.matches("#color-gradiente")){
+
+        const elementoPadre = e.target.parentElement;
+
+        if(e.target.checked == true){
+
+            checkboxStyleSelected(elementoPadre);
+
+            document.querySelector("#color-unico").nextElementSibling.style.color = "#0006"
+            document.querySelector(".contenedor-color-gradiente").style.display = "block";
+            document.getElementById("color-unico").disabled = "true";
+            return;
+        }
+
+        checkboxStyleNoSelected(elementoPadre); 
+        document.querySelector("#color-unico").nextElementSibling.style.color = "#000"
+        document.querySelector(".contenedor-color-gradiente").style.display = "none";
+        document.getElementById("color-unico").removeAttribute("disabled");
+        return;
+    }
+
+    if(e.target.matches(".input-agregar-gradiente")){
+        const color1 = document.getElementById("color1").value;
+        const color2 = document.getElementById("color2").value;
+
+        colores.unshift({color1, color2});
+
+
+        console.log(colores)
+
+        agregarColorGradiente(color1, color2, "cargaDeAgregacion");
     }
 
     e.preventDefault();
@@ -103,6 +155,41 @@ function manejadorDeClicks(e){
         e.target.textContent = `⭐Agregado⭐`;
 
     }
+
+    if(e.target.matches(".btn-favorito-gradiente")){
+
+
+        
+        let color1 = e.target.nextElementSibling.querySelector(".color1-codigo").textContent;
+        let color2 = e.target.nextElementSibling.querySelector(".color2-codigo").textContent;
+        const colorGradiente = {color1, color2};
+        console.log(colorGradiente)
+
+        const objects = favoritos.filter(el => typeof el == "object")
+
+        let validacion = null;
+
+        objects.forEach(el => {
+
+            var propiedadesRepetidas = Object.keys(colorGradiente).every(propiedad => el.hasOwnProperty(propiedad));
+
+            if(propiedadesRepetidas == true){
+                validacion = propiedadesRepetidas;
+                alert("Este color ya esta agregado");
+                return; 
+            } 
+            
+        })
+        
+        if(validacion != true){
+            favoritos.unshift({color1, color2})
+        }
+
+
+        console.log(favoritos)
+
+
+    }
 }
 
 function manejadorDeScroll(e){
@@ -130,9 +217,13 @@ function manejadorDeScroll(e){
     } 
 }
 
-function agregarColoresAlDOM (){
+function eventosAlCargarDOM (){
     crearVentanaSegundoPlano(agregarElementosAbout, "overlay-about", "btn-cerrar-about");
-    crearVentanaSegundoPlano(agregarElementosTecnologias, "overlay-tecnologias", "btn-cerrar-tecnologias")
+    crearVentanaSegundoPlano(agregarElementosTecnologias, "overlay-tecnologias", "btn-cerrar-tecnologias");
+    crearInputCheckBox(".formulario", "Un solo color.", "color-unico", "unico");
+    crearInputCheckBox(".formulario", "Un color con gradiente.", "color-gradiente", "gradiente");
+    crearContenedorColorUnico(".formulario");
+    crearContenedorColorGradiente(".formulario");
 
     localStorage.clear()
 
@@ -164,6 +255,41 @@ function manejadorDeMouseover(e){
         elementoPadre.style.transform = "scale(1.1)";
     }
 
+    if(e.target.matches(".btn-favorito-gradiente")){
+        const elemento = e.target;
+        let color1 = e.target.nextElementSibling.querySelector(".color1-codigo").textContent;
+        let color2 = e.target.nextElementSibling.querySelector(".color2-codigo").textContent;
+        const colorGradiente = {color1, color2};
+        console.log(colorGradiente)
+
+        const objects = favoritos.filter(el => typeof el == "object")
+
+        let validacion = null;
+
+        objects.forEach(el => {
+
+            var propiedadesRepetidas = Object.keys(colorGradiente).every(propiedad => el.hasOwnProperty(propiedad));
+
+            if(propiedadesRepetidas == true){
+                console.log("Propiedades iguales")
+                validacion = propiedadesRepetidas;
+                elemento.textContent = `⭐Agregado⭐`;
+                return; 
+            } 
+            
+
+            
+        })
+        if(validacion != true){
+            elemento.textContent = `⭐Agregar⭐`;
+        }
+        elemento.style.transition = ".5s ease all";
+        elemento.style.boxShadow = "3px 3px 10px #0009 inset";
+        elemento.style.zIndex = "100"
+        const elementoPadre = e.target.parentElement;
+        elementoPadre.style.transform = "scale(1.1)";
+    }
+
     if(e.target.matches(".color")){
 
         e.target.parentElement.style.boxShadow = "0 0 5px #000";
@@ -172,7 +298,7 @@ function manejadorDeMouseover(e){
 }
 
 function manejadorDeMouseout(e){
-    if(e.target.matches(".btn-favorito")){
+    if(e.target.matches(".btn-favorito") || e.target.matches(".btn-favorito-gradiente")){
         const elemento = e.target;
         elemento.style.transition = ".5s ease all";
         elemento.style.boxShadow = "3px 3px 10px #0004 inset";
@@ -222,6 +348,35 @@ function agregarColor(color, carga){
 
 }
 
+function agregarColorGradiente(color1, color2, carga){
+    let contenedor = document.createElement("div");
+    let contenedorColor = document.createElement("button");
+    let strong = document.createElement("h6");
+    
+    estilosDeContenedor(contenedor);
+    estilosDeContenedorDeColorGradiente(contenedorColor, color1, color2);
+    estilosDeCodigoGradiente(strong, color1, color2);
+
+    if(carga === "cargaInicial"){
+        cargaInicial(contenedor);
+    }
+    else if(carga === "cargaDeAgregacion"){
+        cargaDeAgregacion(contenedor);
+    }
+
+    contenedor.appendChild(contenedorColor);
+    contenedor.appendChild(strong);
+
+    document.querySelector(".contenedor-secundario").insertAdjacentElement("afterbegin", contenedor);
+
+    setTimeout(() => {
+        contenedor.style.transform = "scale(1.0)";
+        contenedor.style.transform = "translateX(0)"
+        contenedor.style.opacity = "1"
+    }, 100)
+
+}
+
 /**
  * FUNCION QUE CREA LA VENTANA U OVERLAY EN UNA POSICION EN LA QUE EL USUARIO NO LA VEA
  * @param {function} funcion RECIBE UNA FUNCION PARA AGREGAR LOS ELEMENTOS AL CONTENEDOR DEL OVERLAY.
@@ -244,6 +399,98 @@ function crearVentanaSegundoPlano(funcion, idOverlay, idBtnCerrar){
     funcion(div)
 
     document.body.appendChild(overlay)
+}
+
+const crearContenedorColorUnico = (selector) => {
+
+    const h3 = document.createElement("h3");
+    const div = document.createElement("div");
+    const btnAgregarColor = document.createElement("input");
+    const inputColor = document.createElement("input");
+
+    div.style.display = "none";
+    div.classList.add("contenedor-color-unico");
+
+    h3.textContent = "Agregar Color";
+    h3.style.marginBottom = "10px";
+
+    inputColor.classList.add("input-color");  
+    inputColor.placeholder = "Agregue un nuevo color."
+    inputColor.style.marginRight = "10px";
+    inputColor.id = "color";
+    inputColor.type = "text";
+
+    btnAgregarColor.classList.add("input-agregar");
+    btnAgregarColor.type = "submit";
+    btnAgregarColor.value = "Agregar"
+    btnAgregarColor.id = "btn-agregar"
+    btnAgregarColor.style.textAlign = "center"
+
+    div.appendChild(h3);
+    div.appendChild(inputColor);
+    div.appendChild(btnAgregarColor);
+
+    document.querySelector(selector).appendChild(div);
+}
+
+const checkboxStyleSelected = (elementoPadre) =>{
+    elementoPadre.style.border = "2px solid #000";
+    elementoPadre.style.borderRadius = "10px"
+    elementoPadre.style.backgroundColor = "#0002";
+    elementoPadre.querySelector("p").style.color = "#000"
+}
+
+
+const checkboxStyleNoSelected = (elementoPadre) => {
+    elementoPadre.style.border = "none";
+    elementoPadre.style.borderRadius = "0"
+    elementoPadre.style.backgroundColor = "inherit";
+    elementoPadre.querySelector("p").style.color = "#000"
+}
+
+const crearContenedorColorGradiente = (selector) => {
+
+    const h3 = document.createElement("h3");
+    const div = document.createElement("div");
+    const btnAgregarColor = document.createElement("input");
+    const inputColor1 = document.createElement("input");
+    const inputColor2 = document.createElement("input");
+
+    div.classList.add("contenedor-color-gradiente");
+    div.style.display = "flex";
+    div.style.flexDirection = "column";
+    div.style.gap = "5px";
+
+    h3.textContent = "Agregar Color Gradiente";
+    h3.style.marginBottom = "10px";
+
+    inputColor1.classList.add("input-color");  
+    inputColor1.placeholder = "Agregue el primer valor."
+    inputColor1.id = "color1";
+    inputColor1.type = "text";
+    inputColor1.style.marginBottom = "10px";
+
+    inputColor2.classList.add("input-color");  
+    inputColor2.placeholder = "Agregue el segundo valor."
+    inputColor2.id = "color2";
+    inputColor2.type = "text";
+    inputColor2.style.marginRight = "10px"; 
+
+    btnAgregarColor.classList.add("input-agregar-gradiente");
+    btnAgregarColor.type = "submit";
+    btnAgregarColor.value = "Agregar"
+    btnAgregarColor.id = "btn-agregar-gradiente"
+    btnAgregarColor.style.textAlign = "center"
+    btnAgregarColor.style.width = "100px"
+
+    div.style.display = "none";
+
+    div.appendChild(h3);
+    div.appendChild(inputColor1);
+    div.appendChild(inputColor2);
+    div.appendChild(btnAgregarColor);
+
+    document.querySelector(selector).appendChild(div);
 }
 
 const agregarElementosAbout = (div) => {
@@ -290,6 +537,29 @@ const agregarElementosAbout = (div) => {
     div.appendChild(listaDatosImportantes);
     div.appendChild(titulo3);
     div.appendChild(parrafo3);
+}
+
+const crearInputCheckBox = (selector, texto, id, valor) => {
+
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    const p = document.createElement("p");
+    p.textContent = texto;
+
+    input.type = "checkbox";
+    input.setAttribute("id", id);
+    input.style.cursor = "pointer";
+    input.style.marginLeft = "5px";
+    input.value = valor;
+
+
+    label.style.display = "flex";
+    label.style.width = "200px";
+    label.style.gap = "10px";
+    label.style.alignItems = "center";
+    label.appendChild(input);
+    label.appendChild(p);
+    document.querySelector(selector).appendChild(label);
 }
 
 /**
@@ -627,6 +897,18 @@ const estilosDeContenedorDeColor = (contenedorColor, color) => {
     contenedorColor.setAttribute("title", "👉 Hacer click para agregar a favoritos ✨");
 }
 
+const estilosDeContenedorDeColorGradiente = (contenedorColor, color1, color2) => {
+    contenedorColor.classList.add("btn-favorito-gradiente")
+    contenedorColor.style.width = "100%";
+    contenedorColor.style.height = "150px";
+    contenedorColor.style.borderRadius = "3px";
+    contenedorColor.style.background = "linear-gradient(" + color1 + ", " + color2 + ")";
+    contenedorColor.style.boxShadow = "3px 3px 10px #0004 inset";
+    contenedorColor.style.cursor = "pointer";
+    contenedorColor.style.border = "none"
+    contenedorColor.setAttribute("title", "👉 Hacer click para agregar a favoritos ✨");
+}
+
 /**
  * FUNCION QUE AGREGA LOS ESTILOS DEL CODIGO, DEL CONTENEDOR DE COLOR 
  * @param {elemento} strong RECIBE ELEMENTO DONDE SE AGREGA EL CODIGO 
@@ -638,6 +920,17 @@ const estilosDeCodigo = (strong , color) => {
     strong.style.textAlign = "center";
     strong.style.fontWeight = "bold";
     strong.style.userSelect = "text";
+}
+
+const estilosDeCodigoGradiente = (strong , color1, color2) => {
+    strong.innerHTML = `<h6 style="font-size: 10.74px;" class="color1-codigo"> ${color1} </h6> - <h6 style="font-size: 10.74px;" class="color2-codigo"> ${color2} </h6>`
+    strong.style.width = "100% !important";
+    strong.style.textAlign = "center";
+    strong.style.fontWeight = "bold";
+    strong.style.userSelect = "text";
+    strong.style.display = "flex";
+    strong.style.justifyContent = "center"
+    strong.style.alignItems = "center"
 }
 
 /**
@@ -715,6 +1008,10 @@ const estilosDelMenu = (menu) => {
         btnCopiar.style.border = "1px solid #000"
         btnCopiar.style.borderColor = "#000"
         btnCopiar.style.cursor = "pointer";
+
+        if(typeof valorRGB == "object"){
+            console.log("Hay un objeto, usa destructuracion.");
+        }
 
         if(favoritos.length-1 === contadorElementos){
             color.style.marginBottom = "30px";  
