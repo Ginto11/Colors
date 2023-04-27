@@ -256,7 +256,7 @@ function eventosAlCargarDOM (){
     crearContenedorColorUnico(".formulario");
     crearContenedorColorGradiente(".formulario");
 
-    //localStorage.clear()
+    localStorage.clear()
 
     if(localStorage.getItem("colores") === null){
         localStorage.setItem("colores", JSON.stringify(colores))
