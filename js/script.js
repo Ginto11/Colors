@@ -1,4 +1,4 @@
-let colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9", "#F8C304", "#04558A", "#F4A300", "#CD4450", "#340763", "#1A5C6C", "#0A3B47", "#1F8384", "#59EBCB", "#34495E", "#212040", "#008080", "#B4D9F3"]
+let colores = ["#F77737" ,"#1777F2", "#25D366", "#FFDC80", "#833AB4", "#280C49", "#E1306C", "#128C7E", "#00A4EF", "#292F36", "#DADAD9", "#C2AFF0", "#686868", "#0370B7", "#AF9FA5", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9", "#F8C304", "#04558A", "#F4A300", "#CD4450", "#340763", "#1A5C6C", "#0A3B47", "#1F8384", "#59EBCB", "#34495E", "#212040", "#008080", "#B4D9F3", "#009C8E", "#FFDB6A", "#1F4E5A", "#BBFAF0", "#5EB5D7", "#4365B3", "#84EDED", "#1F242E", "#14AAB8", "#14664A", "#4E4D4D", "#8F63DE", "#544671", "#AAA5BA", "#190019", "#2B124C", "#522B5B", "#06142E", "#1B3358", "#473E66", "#F1916D", "#1D1A39", "#451952", "#AE445A", "#B51A2B", "#FFA586", "#384358", "#541A2E", "#017C8E", "#FFA300", "#000117", "#331A38", {color1: "#FFA300", color2: "#331A38"}, {color1: "#B51A2B", color2: "#017C8E"}, {color1: "#8F63DE", color2: "#14664A"}, {color1: "#F8C304", color2: "#833AB4"}, {color1: "#331A38", color2: "#017C8E"}, {color1: "#FFA586", color2: "#AE445A"}, {color1: "#1B3358", color2: "#14664A"}]                                                                                  
 let favoritos = ["#C2AFF0", "#280C49", "#686868", "#0370B7", "#EDE3E4", "#011C27", "#03254E", "#8FC0A9"];
 
 document.addEventListener("click", (e) => manejadorDeClicks(e));
@@ -53,20 +53,37 @@ function manejadorDeClicks(e){
         document.getElementById("color-unico").removeAttribute("disabled");
         return;
     }
+    
+    e.preventDefault();
 
     if(e.target.matches(".input-agregar-gradiente")){
-        const color1 = document.getElementById("color1").value;
-        const color2 = document.getElementById("color2").value;
+
+        let color1 = document.getElementById("color1").value;
+        let color2 = document.getElementById("color2").value;
+        
+        if(color1 == "" || color2 == ""){
+            return alert("Completa los dos campos, por favor");
+        }
+
+        if(color1[0] != "#"){
+            document.getElementById("color1").value = ""; 
+            return alert("En el primer campo esta mal escrito el codigo.")
+        }
+        if(color2[0] != "#"){
+            document.getElementById("color12").value = ""; 
+            return alert("En el segundo campo esta mal escrito el codigo.")
+        }
+
 
         colores.unshift({color1, color2});
 
+        localStorage.setItem("colores", JSON.stringify(colores));
 
         console.log(colores)
 
         agregarColorGradiente(color1, color2, "cargaDeAgregacion");
     }
 
-    e.preventDefault();
 
     if(e.target.id === "acerca"){
         moverVentana("overlay-about");
@@ -92,9 +109,11 @@ function manejadorDeClicks(e){
             return alert("Este color ya esta agregado, escribe otro por favor.");
         }
         
-        colores.unshift(color);
+        colores.push(color);
 
         localStorage.setItem("colores", JSON.stringify(colores))
+
+        console.log(localStorage.getItem("colores"));
 
         document.querySelector("#color").value = "";
 
@@ -150,7 +169,11 @@ function manejadorDeClicks(e){
         if(favoritos.includes(color)){
             return alert("Este color ya esta agregado");
         }
+
+
         favoritos.unshift(color);
+
+        localStorage.setItem("favoritos", JSON.stringify(favoritos))
 
         e.target.textContent = `⭐Agregado⭐`;
 
@@ -171,23 +194,31 @@ function manejadorDeClicks(e){
 
         objects.forEach(el => {
 
-            var propiedadesRepetidas = Object.keys(colorGradiente).every(propiedad => el.hasOwnProperty(propiedad));
+            let {color1, color2} = el;
+
+            if(colorGradiente.color1 === color1 && colorGradiente.color2 === color2){
+                validacion = true;
+                e.target.textContent = "⭐ Agregado ⭐";
+            }
+
+
+            /*var propiedadesRepetidas = Object.keys(colorGradiente).every(propiedad => el.hasOwnProperty(propiedad));
 
             if(propiedadesRepetidas == true){
                 validacion = propiedadesRepetidas;
                 alert("Este color ya esta agregado");
                 return; 
-            } 
+            } */
             
         })
         
         if(validacion != true){
             favoritos.unshift({color1, color2})
+
+            localStorage.setItem("favoritos", JSON.stringify(favoritos));
+
+            e.target.textContent = "⭐ Agregado ⭐";
         }
-
-
-        console.log(favoritos)
-
 
     }
 }
@@ -225,18 +256,32 @@ function eventosAlCargarDOM (){
     crearContenedorColorUnico(".formulario");
     crearContenedorColorGradiente(".formulario");
 
-    localStorage.clear()
+    //localStorage.clear()
 
-    if(localStorage.getItem("colores") === null){localStorage.setItem("colores", JSON.stringify(colores))}
+    if(localStorage.getItem("colores") === null){
+        localStorage.setItem("colores", JSON.stringify(colores))
+    } else {
+        colores = JSON.parse(localStorage.getItem("colores"));
+    }
 
-    if(localStorage.getItem("favoritos") === null){localStorage.setItem("favoritos", JSON.stringify(favoritos))}
+    if(localStorage.getItem("favoritos") === null){
+        localStorage.setItem("favoritos", JSON.stringify(favoritos))
+    } else {
+        favoritos = JSON.parse(localStorage.getItem("favoritos"));
+    }
     
 
 
     if(localStorage.getItem("colores")){
         let coloresAlmacenados = JSON.parse(localStorage.getItem("colores"));
         coloresAlmacenados.forEach(color => {
-            agregarColor(color, "cargaInicial");
+            
+            if(typeof color == "object"){
+                let {color1, color2} = color;
+                agregarColorGradiente(color1, color2, "cargaDeAgregacion");
+            } else {
+                agregarColor(color, "cargaInicial");
+            }
         });
     }
 }
@@ -260,7 +305,6 @@ function manejadorDeMouseover(e){
         let color1 = e.target.nextElementSibling.querySelector(".color1-codigo").textContent;
         let color2 = e.target.nextElementSibling.querySelector(".color2-codigo").textContent;
         const colorGradiente = {color1, color2};
-        console.log(colorGradiente)
 
         const objects = favoritos.filter(el => typeof el == "object")
 
@@ -268,14 +312,22 @@ function manejadorDeMouseover(e){
 
         objects.forEach(el => {
 
-            var propiedadesRepetidas = Object.keys(colorGradiente).every(propiedad => el.hasOwnProperty(propiedad));
+            let {color1, color2} = el;
+
+            if(colorGradiente.color1 === color1 && colorGradiente.color2 === color2){
+                validacion = true;
+                elemento.textContent = `⭐Agregado⭐`;
+            }
+
+            /*var propiedadesRepetidas = Object.values(colorGradiente).every(propiedad => el.hasOwnProperty(propiedad));
 
             if(propiedadesRepetidas == true){
                 console.log("Propiedades iguales")
                 validacion = propiedadesRepetidas;
                 elemento.textContent = `⭐Agregado⭐`;
+                validacion = false;
                 return; 
-            } 
+            } */
             
 
             
@@ -992,7 +1044,11 @@ const estilosDelMenu = (menu) => {
     menu.style.gap = "30px";
     menu.style.zIndex = 1001
 
-    favoritos.forEach((valorRGB, i) => {
+    let favoritosAlmacenados = JSON.parse(localStorage.getItem("favoritos"));
+
+    console.log(favoritosAlmacenados)
+
+    favoritosAlmacenados.forEach((valorRGB, i) => {
 
         let contadorElementos = i;
 
@@ -1010,7 +1066,12 @@ const estilosDelMenu = (menu) => {
         btnCopiar.style.cursor = "pointer";
 
         if(typeof valorRGB == "object"){
-            console.log("Hay un objeto, usa destructuracion.");
+            let {color1, color2} = valorRGB;
+            color.style.background = "linear-gradient(" + color1 + ", " + color2 + ")";
+            btnCopiar.setAttribute("data-color", `${color1} - ${color2}`);
+        } else {
+            color.style.backgroundColor = valorRGB;
+            btnCopiar.setAttribute("data-color", valorRGB);
         }
 
         if(favoritos.length-1 === contadorElementos){
@@ -1022,13 +1083,10 @@ const estilosDelMenu = (menu) => {
         color.style.justifyContent = "flex-end";
         color.style.width = "80%"
         color.style.height = "30px";
-        color.style.backgroundColor = valorRGB;
         color.style.borderTopLeftRadius = "5px";
         color.style.borderBottomLeftRadius = "5px";
 
         color.appendChild(btnCopiar);
-
-        btnCopiar.setAttribute("data-color", valorRGB);
 
         menu.appendChild(color);
 
