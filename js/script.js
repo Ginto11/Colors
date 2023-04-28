@@ -278,7 +278,7 @@ function eventosAlCargarDOM (){
             
             if(typeof color == "object"){
                 let {color1, color2} = color;
-                agregarColorGradiente(color1, color2, "cargaDeAgregacion");
+                agregarColorGradiente(color1, color2, "cargaInicial");
             } else {
                 agregarColor(color, "cargaInicial");
             }
