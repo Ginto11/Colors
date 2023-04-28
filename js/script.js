@@ -75,7 +75,7 @@ function manejadorDeClicks(e){
         }
 
 
-        colores.unshift({color1, color2});
+        colores.push({color1, color2});
 
         localStorage.setItem("colores", JSON.stringify(colores));
 
